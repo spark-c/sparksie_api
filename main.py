@@ -1,12 +1,14 @@
 
 from fastapi import FastAPI
+import ezgmail
+import os
 import json
 from typing import Union, List, Dict
 
 
+ezgmail.init()
 
 app: FastAPI = FastAPI()
-
 
 @app.get("/")
 async def root() -> Dict[str,str]:

@@ -4,7 +4,7 @@ import os
 # from envvars if the files are not already present.
 # Seems necessary for use without exposing credentials in repo
 if not os.path.isfile("credentials.json"):
-    credContents: str = os.environ["credentials"]
+    credContents: str = os.environ["CREDENTIALS"]
     try:
         with open("credentials.json", "w") as f:
             f.write(credContents)
@@ -13,7 +13,7 @@ if not os.path.isfile("credentials.json"):
         print("couldn't create ./credentials.json!")
 
 if not os.path.isfile("token.json"):
-    tokenContents: str = os.environ["token"]
+    tokenContents: str = os.environ["TOKEN"]
     try:
         with open("token.json", "w") as f:
             f.write(tokenContents)
@@ -22,8 +22,7 @@ if not os.path.isfile("token.json"):
 
 from fastapi import FastAPI
 import ezgmail
-import json
-from typing import Union, List, Dict
+from typing import Dict
 from pydantic import BaseModel
 
 
@@ -48,7 +47,7 @@ async def send_email(email: Email) -> Dict[str, str]:
         message_body: str = (
             "Sent by:\n" +
             f"{email.sender_name}\n" +
-            f"{email.sender_email}" +
+            f"{email.sender_email}\n\n" +
             email.body
         )
 

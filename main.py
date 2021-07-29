@@ -16,5 +16,5 @@ async def root() -> Dict[str,str]:
 
 @app.get("/send_email")
 async def send_email() -> Dict[str, str]:
-    
+    ezgmail.send("sparksie.api@gmail.com", "Subject Line!", "This is the message body!")
     return {"key": "value"}

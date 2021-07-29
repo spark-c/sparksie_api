@@ -1,0 +1,9 @@
+POST http://localhost:8000/send_email HTTP/1.1
+content-type: application/json
+
+{
+  "sender_name": "Collin Sparks",
+  "sender_email": "cklsparks@gmail.com",
+  "subject": "Here is the subject",
+  "body": "The email body is thus! Bask in the glory of this email which you have received!"
+}

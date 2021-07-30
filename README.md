@@ -1,4 +1,15 @@
 # sparksie_api
-Misc things I need to use an API for. Currently:
+Misc things I need to use an API for. Written using [FastAPI](https://fastapi.tiangolo.com/) and hosted on [Vercel](https://vercel.com).
 
-- Receives contact form requests from portfolio via `/send_email` and sends an email using [EZGmail](https://ezgmail.readthedocs.io/en/latest/) library.
+### Current endpoints:
+
+```
+/send_email
+''' restricted access '''
+{
+  sender_name : str
+  sender_email: str
+  subject: str
+  body: str
+{
+```

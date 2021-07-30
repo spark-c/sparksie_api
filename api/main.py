@@ -1,5 +1,6 @@
 import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from typing import Dict
 from pydantic import BaseModel
@@ -15,12 +16,24 @@ class Email(BaseModel):
     subject: str
     body: str
 
-
 port: int = 465
-# password: str = os.environ["PASSWORD"]
-password: str = "46cobr46a13RANDOM"
+password: str = os.environ["PASSWORD"]
 
 app: FastAPI = FastAPI()
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost",
+    "http://localhost:8000",
+    "spark-c.github.io"
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root() -> Dict[str,str]:

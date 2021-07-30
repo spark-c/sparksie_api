@@ -2,8 +2,8 @@
   "builds": [
     {"src": "api/main.py", "use": "@vercel/python"}
   ],
-  "routes": [
-    {"src": "/send_email", "dest": "api/main.py"}
+  "rewrites": [
+    {"source": "/send_email", "destination": "api/main.py"}
   ],
   "headers": [
     {

@@ -4,8 +4,8 @@ content-type: application/json
 {
   "sender_name": "Collin Sparks",
   "sender_email": "cklsparks@gmail.com",
-  "subject": "OMG",
-  "body": "HUYNHY IS THA BEST HUNNY EVERE IN DA WROLD AND WE HAVE CUTE PUPPIES\n<3"
+  "subject": "Not an important message",
+  "body": "This is a very professional email which you are receiving"
 }
 
 ###
@@ -16,6 +16,6 @@ content-type: application/json
 {
   "sender_name": "Collin Sparks",
   "sender_email": "cklsparks@gmail.com",
-  "subject": "OMG",
-  "body": "HUYNHY IS THA BEST HUNNY EVERE IN DA WROLD AND WE HAVE CUTE PUPPIES\n<3"
+  "subject": "Did it work?",
+  "body": "This is a test message which should be reaching me through the Vercel server"
 }

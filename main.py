@@ -1,30 +1,12 @@
 import os
-
-# Attempts to generate ezgmail credentials.json and token.json 
-# from envvars if the files are not already present.
-# Seems necessary for use without exposing credentials in repo
-if not os.path.isfile("credentials.json"):
-    credContents: str = os.environ["CREDENTIALS"]
-    try:
-        with open("credentials.json", "w") as f:
-            f.write(credContents)
-            print(credContents)
-    except:
-        print("couldn't create ./credentials.json!")
-
-if not os.path.isfile("token.json"):
-    tokenContents: str = os.environ["TOKEN"]
-    try:
-        with open("token.json", "w") as f:
-            f.write(tokenContents)
-    except:
-        print("couldn't create ./token.json!")
-
 from fastapi import FastAPI
 import uvicorn
-import ezgmail
 from typing import Dict
 from pydantic import BaseModel
+
+import smtplib
+import ssl
+from email.message import EmailMessage
 
 
 class Email(BaseModel):
@@ -34,7 +16,10 @@ class Email(BaseModel):
     body: str
 
 
-ezgmail.init()
+port: int = 465
+# password: str = os.environ["PASSWORD"]
+password: str = "46cobr46a13RANDOM"
+
 app: FastAPI = FastAPI()
 
 @app.get("/")
@@ -45,25 +30,30 @@ async def root() -> Dict[str,str]:
 @app.post("/send_email")
 async def send_email(email: Email) -> Dict[str, str]:
     if email:
-        target_email: str = "sparksie.api@gmail.com"
-        message_body: str = (
-            "Sent by:\n" +
-            f"{email.sender_name}\n" +
-            f"{email.sender_email}\n\n" +
-            email.body
-        )
+        target_email: str = "cklsparks@gmail.com"
+
+        mail: EmailMessage = EmailMessage()
+        mail.set_content(email.body)
+        mail["Subject"] = email.subject
+        mail["To"] = target_email
+        mail["From"] = "sparksie.api@gmail.com"
+        mail["Cc"] = email.sender_email
 
         try:
-            ezgmail.send(
-                target_email,
-                email.subject,
-                message_body)
-        except:
-            print("Something went wrong sending!")
-            # send error code
+            context: ssl.SSLContext = ssl.create_default_context()
+            with (
+                smtplib.SMTP_SSL("smtp.gmail.com", port, context=context)
+                as server
+            ):
+                server.login("sparksie.api@gmail.com", password)
+                server.send_message(mail)
+
+        except Exception as e:
+            print(f"Something went wrong sending!\n{e}")
+            # TODO send error code
             return {"placeholder": "couldn't send"}
     else:
-        # send error code
+        # TODO error code
         return {"placeholder": "missing parameters"}
 
     return {"placeholder": "success 200"}

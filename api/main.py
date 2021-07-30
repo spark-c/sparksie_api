@@ -41,10 +41,12 @@ async def send_email(email: Email) -> Dict[str, str]:
 
         try:
             context: ssl.SSLContext = ssl.create_default_context()
-            with (
-                smtplib.SMTP_SSL("smtp.gmail.com", port, context=context)
-                as server
-            ):
+            with smtplib.SMTP_SSL(
+                    "smtp.gmail.com",
+                    port,
+                    context=context
+                ) as server: 
+
                 server.login("sparksie.api@gmail.com", password)
                 server.send_message(mail)
 

@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from typing import Dict
+from typing import Dict, List
 from pydantic import BaseModel
 
 import smtplib
@@ -16,11 +16,9 @@ class Email(BaseModel):
     subject: str
     body: str
 
-port: int = 465
-password: str = os.environ["PASSWORD"]
 
 app: FastAPI = FastAPI()
-origins = [
+origins: List[str] = [
     "http://localhost",
     "http://localhost:3000",
     "http://localhost",
@@ -34,6 +32,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+smtp_port: int = 465
+smtp_password: str = os.environ["PASSWORD"]
 
 @app.get("/")
 async def root() -> Dict[str,str]:
@@ -56,11 +57,11 @@ async def send_email(email: Email) -> Dict[str, str]:
             context: ssl.SSLContext = ssl.create_default_context()
             with smtplib.SMTP_SSL(
                     "smtp.gmail.com",
-                    port,
+                    smtp_port,
                     context=context
                 ) as server: 
 
-                server.login("sparksie.api@gmail.com", password)
+                server.login("sparksie.api@gmail.com", smtp_password)
                 server.send_message(mail)
 
         except Exception as e:

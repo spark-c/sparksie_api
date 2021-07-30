@@ -10,7 +10,7 @@ content-type: application/json
 
 ###
 
-POST sparksie-api.vercel.app/send_email HTTP/1.1
+POST https://sparksie-api.vercel.app/send_email HTTP/1.1
 content-type: application/json
 
 {

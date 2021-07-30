@@ -4,6 +4,18 @@ content-type: application/json
 {
   "sender_name": "Collin Sparks",
   "sender_email": "cklsparks@gmail.com",
-  "subject": "Here is the subject",
-  "body": "The email body is thus! Bask in the glory of this email which you have received!"
+  "subject": "OMG",
+  "body": "HUYNHY IS THA BEST HUNNY EVERE IN DA WROLD AND WE HAVE CUTE PUPPIES\n<3"
+}
+
+###
+
+POST sparksie-api.vercel.app/send_email HTTP/1.1
+content-type: application/json
+
+{
+  "sender_name": "Collin Sparks",
+  "sender_email": "cklsparks@gmail.com",
+  "subject": "OMG",
+  "body": "HUYNHY IS THA BEST HUNNY EVERE IN DA WROLD AND WE HAVE CUTE PUPPIES\n<3"
 }

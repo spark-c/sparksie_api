@@ -21,6 +21,7 @@ if not os.path.isfile("token.json"):
         print("couldn't create ./token.json!")
 
 from fastapi import FastAPI
+import uvicorn
 import ezgmail
 from typing import Dict
 from pydantic import BaseModel
@@ -39,6 +40,7 @@ app: FastAPI = FastAPI()
 @app.get("/")
 async def root() -> Dict[str,str]:
     return {"hello": "world"}
+
 
 @app.post("/send_email")
 async def send_email(email: Email) -> Dict[str, str]:
@@ -65,3 +67,7 @@ async def send_email(email: Email) -> Dict[str, str]:
         return {"placeholder": "missing parameters"}
 
     return {"placeholder": "success 200"}
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

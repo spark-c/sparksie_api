@@ -1,21 +1,21 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from typing import Dict, List
+from typing import Dict, List, Any
 from pydantic import BaseModel
 
 import smtplib
 import ssl
 from email.message import EmailMessage
+from tempfile import NamedTemporaryFile
+
+import kidslinkedConverter.kidslinkedConverter as kc
 
 
-class Email(BaseModel):
-    sender_name: str
-    sender_email: str
-    subject: str
-    body: str
 
+
+### Init ###
 
 app: FastAPI = FastAPI()
 origins: List[str] = [
@@ -36,9 +36,20 @@ app.add_middleware(
 smtp_port: int = 465
 smtp_password: str = os.environ["PASSWORD"]
 
+
+### Endpoints ###
+
 @app.get("/")
 async def root() -> Dict[str,str]:
     return {"hello": "world"}
+
+# email #
+
+class Email(BaseModel):
+    sender_name: str
+    sender_email: str
+    subject: str
+    body: str
 
 
 @app.post("/send_email")
@@ -73,6 +84,33 @@ async def send_email(email: Email) -> Dict[str, str]:
         return {"placeholder": "missing parameters"}
 
     return {"placeholder": "success 200"}
+
+
+# converter #
+
+class ContactData(BaseModel):
+    raw: str
+
+class ParsedData(BaseModel):
+    data: List[Dict[str, Any]]
+
+@app.post("/kc_parse")
+async def kc_parse(contact_data: ContactData) -> Dict[str,int|List[Dict[str, Any]]]:
+    parsed: List[Dict[str, str]] = kc.compile_for_remote({'message': contact_data.raw})
+    return {
+        "count": len(parsed),
+        "data": parsed
+    }
+
+
+@app.post("/kc_get_workbook")
+async def kc_get_workbook(parsed_data: ParsedData) -> Any:
+    wb: Any = kc.generate_wb(parsed_data.data)
+    with NamedTemporaryFile() as tmp:
+        wb.save(tmp.name)
+        tmp.seek(0)
+        stream = tmp.read()
+    return Response(content=stream, media_type="application/ms-excel")
 
 
 if __name__ == "__main__":

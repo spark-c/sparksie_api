@@ -3,7 +3,7 @@
     {"src": "api/main.py", "use": "@vercel/python"}
   ],
   "rewrites": [
-    {"source": "/send_email", "destination": "api/main.py"}
+    {"source": "(/.*)", "destination": "api/main.py"}
   ],
   "headers": [
     {

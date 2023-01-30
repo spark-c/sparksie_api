@@ -10,7 +10,7 @@ import ssl
 from email.message import EmailMessage
 from tempfile import NamedTemporaryFile
 
-import kidslinkedConverter.kidslinkedConverter as kc
+from kidslinkedConverter import kidslinkedConverter as kc
 
 
 

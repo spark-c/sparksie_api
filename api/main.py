@@ -23,7 +23,8 @@ origins: List[str] = [
     "http://localhost:3000",
     "http://localhost",
     "http://localhost:8000",
-    "https://spark-c.github.io"
+    "https://spark-c.github.io",
+    "https://www.appsmith.com"
 ]
 app.add_middleware(
     CORSMiddleware,
